@@ -2,9 +2,14 @@ import cv2
 import numpy as np
 import random
 import matplotlib. pyplot as plt
+<<<<<<< HEAD
 from process import Process, fix
 from change import Change
 import sys
+=======
+from process2 import Process2, fix
+from change import Change
+>>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
 
 kernel = np.ones((5, 5), np.uint8)
 kernel2 = np.ones((10, 10), np.uint8)
@@ -14,6 +19,7 @@ def nothing():
     pass
 
 
+<<<<<<< HEAD
 imgk = cv2.imread('./img/lib/red/k.jpg')
 imgl = cv2.imread('./img/lib/red/l.jpg')
 imgk = cv2.resize(imgk, None, fx=0.1, fy=0.1, interpolation=cv2.INTER_CUBIC)
@@ -57,6 +63,25 @@ while True:
         cv2.namedWindow('Before')
         cv2.imshow('Before', imgb)
 
+=======
+key = cv2.waitKey(1) & 0xff
+while key != 27:
+    key = cv2.waitKey(1) & 0xff
+
+    x = chr(random.randint(97, 116))
+    imgb = cv2.imread('./img/lib/red/{}.jpg'.format(x))
+    imga = cv2.imread('./img/lib/ps/ps1a.jpg')
+
+    imgb = cv2.flip(imgb, 1)
+    imgb = cv2.resize(imgb, None, fx=0.1, fy=0.1, interpolation=cv2.INTER_CUBIC)
+    pbef = Process2(imgb)
+    paft = Process2(imga)
+
+    cv2.namedWindow('Before')
+    cv2.imshow('Before', imgb)
+
+    while True:
+>>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
         pbef.lowp = np.array([170, 255, 255])
         pbef.highp = np.array([10, 0, 0])
         pbef.loww = np.array([0, 0, 150])
@@ -115,6 +140,10 @@ while True:
         whitea = paft.bleached(resa, kernel2)
         maskc = cv2.bitwise_xor(maskb, maska)
         maskc = cv2.morphologyEx(maskc, cv2.MORPH_OPEN, kernel)
+<<<<<<< HEAD
+=======
+        #maskc = cv2.morphologyEx(openingc, cv2.MORPH_CLOSE, kernel4)
+>>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
         dif = Change(imga, maskb, maska)
         growth, death = dif.growth_death(kernel2)
         bleach, recover = dif.bleach_recover(whiteb, whitea, growth, death, kernel2)
@@ -129,7 +158,11 @@ while True:
         fig, axs = plt.subplots(1, 3, dpi=400)
         rgb_imgb = imgb[..., ::-1]
         axs[0].imshow(rgb_imgb)
+<<<<<<< HEAD
         axs[0].set_title('Before {}'.format(file))
+=======
+        axs[0].set_title('Before')
+>>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
         axs[0].axis('off')
         rgb_imga = imga[..., ::-1]
         axs[1].imshow(rgb_imga)
@@ -143,6 +176,7 @@ while True:
 
         k = cv2.waitKey(1) & 0xff
         if k == ord('q'):
+<<<<<<< HEAD
             print('fk you bitch')
             break
 
@@ -150,5 +184,9 @@ while True:
         sys.exit(0)
 '''
 
+=======
+            break
+
+>>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
 cv2.waitKey(0)
 cv2.destroyAllWindows()

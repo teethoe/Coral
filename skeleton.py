@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+<<<<<<< HEAD
 
 class Skeleton:
     def __init__(self, mask):
@@ -8,6 +9,13 @@ class Skeleton:
 
     def skeletize(self):
         element = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3))
+=======
+class skeleton:
+    def __init__(self, mask):
+        self.mask = mask
+
+    def skeletize(self, element):
+>>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
         size = np.size(self.mask)
         skel = np.zeros(self.mask.shape, np.uint8)
         fin = self.mask.copy()
@@ -22,4 +30,9 @@ class Skeleton:
             zeros = size - cv2.countNonZero(fin)
             if zeros == size:
                 done = True
+<<<<<<< HEAD
         return skel
+=======
+
+        return skel
+>>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e

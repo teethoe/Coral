@@ -12,7 +12,11 @@ maskp = cv2.inRange(hsv, lowp, highp)
 maskw = cv2.inRange(hsv, loww, highw)
 mask = maskp + maskw
 opening = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+<<<<<<< HEAD
 res = cv2.bitwise_and(img, img, mask=opening)
+=======
+res = cv2.bitwise_and(img, img, mask = opening)
+>>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
 cv2.imshow('Before', img)
 cv2.imshow('Mask', mask)
 cv2.imshow('Res', res)
