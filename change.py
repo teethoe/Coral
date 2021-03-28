@@ -1,10 +1,7 @@
 import cv2
-<<<<<<< HEAD
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-=======
->>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
 
 
 class Change:
@@ -22,12 +19,9 @@ class Change:
     def growth_death(self, kernel):
         growth = self.maska - self.maskb
         death = self.maskb - self.maska
-<<<<<<< HEAD
         cv2.imshow('growth', growth)
         cv2.imshow('death', death)
         cv2.waitKey(0)
-=======
->>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
         arr = [growth, death]
         colours = [self.green, self.yellow]
         for j in range(len(arr)):
@@ -37,11 +31,7 @@ class Change:
             for i in range(len(contours)):
                 cnt = contours[i]
                 x, y, w, h = cv2.boundingRect(cnt)
-<<<<<<< HEAD
                 if w > 15 and h > 15:
-=======
-                if w>15 and h>15:
->>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
                     self.change = cv2.rectangle(self.change, (x,y), (x+w,y+h), colours[j], 2)
         return arr
 
@@ -57,17 +47,12 @@ class Change:
             for i in range(len(contours)):
                 cnt = contours[i]
                 x, y, w, h = cv2.boundingRect(cnt)
-<<<<<<< HEAD
                 if w > 15 and h > 15:
-=======
-                if w>15 and h>15:
->>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
                     self.change = cv2.rectangle(self.change, (x,y), (x+w,y+h), colours[j], 2)
         return arr
 
     def final(self):
         return self.change
-<<<<<<< HEAD
 
 
 def plot(imgb, imga, final):
@@ -85,5 +70,3 @@ def plot(imgb, imga, final):
     axs[2].set_title('Final')
     axs[2].axis('off')
     plt.show()
-=======
->>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e

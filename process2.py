@@ -12,16 +12,12 @@ class Process2:
         self.highp = 0
         self.loww = 0
         self.highw = 0
-<<<<<<< HEAD
         self.flipw = False
-=======
->>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
 
     def mask(self, kernel):
         if self.lowp[0] < self.highp[0]:
             maskp = cv2.inRange(self.hsv, self.lowp, self.highp)
         else:
-<<<<<<< HEAD
             temp = self.lowp[0]
             self.lowp[0] = self.highp[0]
             self.highp[0] = temp
@@ -35,13 +31,6 @@ class Process2:
             self.loww[0] = self.highw[0]
             self.highw[0] = temp
             maskw = cv2.bitwise_not(cv2.inRange(self.hsv, self.loww, self.highw))
-=======
-            maskp = cv2.bitwise_not(cv2.inRange(self.hsv, self.highp, self.lowp))
-        if self.loww[0] < self.highp[0]:
-            maskw = cv2.inRange(self.hsv, self.loww, self.highw)
-        else:
-            maskw = cv2.bitwise_not(cv2.inRange(self.hsv, self.highw, self.loww))
->>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
         temp = maskp + maskw
         closing = cv2.morphologyEx(temp, cv2.MORPH_CLOSE, kernel)
         opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel)
@@ -52,7 +41,6 @@ class Process2:
             x, y, w, h = cv2.boundingRect(cnt)
             if w >= l[2] and h >= l[3]:
                 l = [x, y, w, h]
-<<<<<<< HEAD
         return l, opening
 
     def maskth(self, img, value, kernel):
@@ -69,11 +57,6 @@ class Process2:
                 l = [x, y, w, h]
         return l, closing
 
-=======
-        #x, y, w, h = l
-        return l, opening
-
->>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
     def res(self, img, mask):
         res = cv2.bitwise_and(img, img, mask=mask)
         #res = cv2.blur(res,(5,5))
@@ -81,16 +64,12 @@ class Process2:
 
     def bleached(self, res, kernel):
         hsv = cv2.cvtColor(res, cv2.COLOR_BGR2HSV)
-<<<<<<< HEAD
         if not self.flipw:
             white = cv2.inRange(hsv, self.loww, self.highw)
         else:
             ret, mask = cv2.threshold(cv2.cvtColor(res, cv2.COLOR_BGR2GRAY), 1, 255, cv2.THRESH_BINARY)
             npink = cv2.bitwise_not(cv2.inRange(hsv, self.loww, self.highw))
             white = cv2.bitwise_and(npink, npink, mask=mask)
-=======
-        white = cv2.inRange(hsv, self.loww, self.highw)
->>>>>>> 54fc90ae7764bd086d4603aaa049854a1462df7e
         closing = cv2.morphologyEx(white, cv2.MORPH_CLOSE, kernel)
         return closing
 
