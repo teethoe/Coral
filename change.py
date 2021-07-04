@@ -19,9 +19,6 @@ class Change:
     def growth_death(self, kernel):
         growth = self.maska - self.maskb
         death = self.maskb - self.maska
-        cv2.imshow('growth', growth)
-        cv2.imshow('death', death)
-        cv2.waitKey(0)
         arr = [growth, death]
         colours = [self.green, self.yellow]
         for j in range(len(arr)):
@@ -32,7 +29,7 @@ class Change:
                 cnt = contours[i]
                 x, y, w, h = cv2.boundingRect(cnt)
                 if w > 15 and h > 15:
-                    self.change = cv2.rectangle(self.change, (x,y), (x+w,y+h), colours[j], 2)
+                    self.change = cv2.rectangle(self.change, (x, y), (x+w, y+h), colours[j], 2)
         return arr
 
     def bleach_recover(self, whiteb, whitea, growth, death, kernel):
@@ -48,7 +45,7 @@ class Change:
                 cnt = contours[i]
                 x, y, w, h = cv2.boundingRect(cnt)
                 if w > 15 and h > 15:
-                    self.change = cv2.rectangle(self.change, (x,y), (x+w,y+h), colours[j], 2)
+                    self.change = cv2.rectangle(self.change, (x, y), (x+w, y+h), colours[j], 2)
         return arr
 
     def final(self):

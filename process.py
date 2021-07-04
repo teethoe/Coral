@@ -45,6 +45,7 @@ class Process:
         self.img = self.img[y:y + h, x:x + w]
         #mask = cv2.blur(opening[y:y + h, x:x + w],(5,5))
         mask = opening[y:y + h, x:x + w]
+        mask = cv2.blur(mask, (5, 5))
         #mask[mask < 0] = 0
         return mask, self.img
 

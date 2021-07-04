@@ -43,8 +43,8 @@ class Process2:
                 l = [x, y, w, h]
         return l, opening
 
-    def maskth(self, img, value, kernel):
-        grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    def maskth(self, value, kernel):
+        grey = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
         ret, th = cv2.threshold(grey, value, 255, cv2.THRESH_BINARY_INV)
         opening = cv2.morphologyEx(th, cv2.MORPH_OPEN, kernel)
         closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
@@ -76,19 +76,24 @@ class Process2:
 
 def fix(maskb, maska):
     ha, wa = maska.shape[:2]
+    # detect ORB features and compute descriptors
     orb_detector = cv2.ORB_create(5000)
     kpb, db = orb_detector.detectAndCompute(maskb, None)
     kpa, da = orb_detector.detectAndCompute(maska, None)
+    # match features
     matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
     matches = matcher.match(db, da)
+    # sort matches by score and take top matches
     matches.sort(key=lambda x: x.distance)
     matches = matches[:int(len(matches) * 90)]
     no_of_matches = len(matches)
-    pb = np.zeros((no_of_matches, 2))
-    pa = np.zeros((no_of_matches, 2))
+    # extract location of good matches
+    ptsb = np.zeros((no_of_matches, 2))
+    ptsa = np.zeros((no_of_matches, 2))
     for i in range(len(matches)):
-        pb[i, :] = kpb[matches[i].queryIdx].pt
-        pa[i, :] = kpa[matches[i].trainIdx].pt
-    homography, mask = cv2.findHomography(pb, pa, cv2.RANSAC)
+        ptsb[i, :] = kpb[matches[i].queryIdx].pt
+        ptsa[i, :] = kpa[matches[i].trainIdx].pt
+    # find homography + perspective warping transformation
+    homography, mask = cv2.findHomography(ptsb, ptsa, cv2.RANSAC)
     trans = cv2.warpPerspective(maskb, homography, (wa, ha))
     return trans

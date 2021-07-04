@@ -87,7 +87,7 @@ while True:
     #paft.highp[0] = 180
 
     thv = atb.get_threshold()
-    lt, closing = paft.maskth(hca, thv, kernel5)
+    lt, closing = paft.maskth(thv, kernel5)
     cv2.imshow('thresh', closing)
 
     '''
