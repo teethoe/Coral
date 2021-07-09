@@ -10,7 +10,7 @@ kernel2 = np.ones((10, 10), np.uint8)
 
 imgb = cv2.imread('./img/ref/new/2.jpg')
 #imgb = cv2.flip(imgb, 1)
-imga = cv2.imread('./img/ref/new/1.jpg')
+imga = cv2.imread('./img/ref/new/F.png')
 
 
 imgb = cv2.resize(imgb, None, fx=0.3, fy=0.3, interpolation=cv2.INTER_CUBIC)
@@ -21,6 +21,8 @@ pbef.loww = np.array([90, 0, 150])
 pbef.highw = np.array([120, 50, 255])
 maskb, imgb = pbef.mask(kernel)
 resb = pbef.res(maskb)
+cv2.imshow('maskb', maskb)
+cv2.waitKey(0)
 
 
 imga = cv2.resize(imga, None, fx=0.3, fy=0.3, interpolation=cv2.INTER_CUBIC)

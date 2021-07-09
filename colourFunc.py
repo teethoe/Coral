@@ -1,7 +1,3 @@
-import cv2
-import numpy as np
-
-
 def bgr2hex(colour):
     return "#{:02x}{:02x}{:02x}".format(int(colour[2]), int(colour[1]), int(colour[0]))
 

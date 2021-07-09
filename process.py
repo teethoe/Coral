@@ -57,7 +57,7 @@ class Process:
             maskw = cv2.bitwise_not(cv2.inRange(self.hsv, self.loww, self.highw))
         temp = maskp + maskw
         closing = cv2.morphologyEx(temp, cv2.MORPH_CLOSE, kernel)
-        kernel2 = np.ones((7, 7), np.uint8)
+        kernel2 = np.ones((8, 8), np.uint8)
         opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel2)
         cv2.imshow('opening', opening)
         cv2.waitKey(0)

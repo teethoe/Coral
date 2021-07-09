@@ -1,84 +1,91 @@
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import hsv_to_rgb, rgb_to_hsv
+from sklearn.cluster import KMeans
+from collections import Counter
+from process import Process
 
-imgb = cv2.imread('./img/lib/red/a.jpg')
-imgb = cv2.resize(imgb,None,fx=0.1,fy=0.1,interpolation=cv2.INTER_CUBIC)
+
+imgb = cv2.imread('./img/ref/new/1.jpg')
+imgb = cv2.resize(imgb, None, fx=0.3, fy=0.3, interpolation=cv2.INTER_CUBIC)
 hsv = cv2.cvtColor(imgb, cv2.COLOR_BGR2HSV)
 
-kernel = np.ones((5,5),np.uint8)    
+kernel = np.ones((5, 5), np.uint8)
 
 
-def nothing(x):
-    pass
+def bgr2hex(colour):
+    return "#{:02x}{:02x}{:02x}".format(int(colour[2]), int(colour[1]), int(colour[0]))
 
 
-cv2.namedWindow('Before')
+def rgb2hex(colour):
+    return "#{:02x}{:02x}{:02x}".format(int(colour[0]), int(colour[1]), int(colour[2]))
 
-cv2.createTrackbar('hpink', 'Before', 0, 180, nothing)
-cv2.createTrackbar('slpink', 'Before', 0, 255, nothing)
-cv2.createTrackbar('shpink', 'Before', 0, 255, nothing)
-cv2.createTrackbar('vlpink', 'Before', 0, 255, nothing)
-cv2.createTrackbar('vhpink', 'Before', 0, 255, nothing)
 
-cv2.createTrackbar('hwhite', 'Before', 0, 180, nothing)
-cv2.createTrackbar('slwhite', 'Before', 0, 255, nothing)
-cv2.createTrackbar('shwhite', 'Before', 0, 255, nothing)
-cv2.createTrackbar('vlwhite', 'Before', 0, 255, nothing)
-cv2.createTrackbar('vhwhite', 'Before', 0, 255, nothing)
+def bgr2rgb(colour):
+    return [colour[2], colour[1], colour[0]]
 
-while True:
-    print('hi')
-    hpink = cv2.getTrackbarPos('hpink', 'Before')
-    slpink = cv2.getTrackbarPos('slpink', 'Before')
-    shpink = cv2.getTrackbarPos('shpink', 'Before')
-    vlpink = cv2.getTrackbarPos('vlpink', 'Before')
-    vhpink = cv2.getTrackbarPos('vhpink', 'Before')
 
-    hwhite = cv2.getTrackbarPos('hwhite', 'Before')
-    slwhite = cv2.getTrackbarPos('slwhite', 'Before')
-    shwhite = cv2.getTrackbarPos('shwhite', 'Before')
-    vlwhite = cv2.getTrackbarPos('vlwhite', 'Before')
-    vhwhite = cv2.getTrackbarPos('vhwhite', 'Before')
-    cv2.imshow('imgb', imgb)
+def normalise_hsv(arr):
+    norm = arr.copy()
+    for i in range(len(norm)):
+        norm[i][0] *= (1/180)
+        for j in range(2):
+            norm[i][j+1] *= (1/255)
+    return norm
 
-    lowp = np.array([(180+(hpink-10))%180,slpink,vlpink])
-    print(lowp)
-    highp = np.array([(hpink+10)%180,shpink,vhpink])
-    loww = np.array([(180+(hwhite-10))%180,slwhite,vlwhite])
-    highw = np.array([(hwhite+10)%180,shwhite,vhwhite])
 
-    if lowp[0] < highp[0]:
-        maskp = cv2.inRange(hsv, lowp, highp)
-    else:
-        maskp = cv2.bitwise_not(cv2.inRange(hsv, highp, lowp))
-        cv2.imshow('maskp', maskp)
-    if loww[0] < highp[0]:
-        maskw = cv2.inRange(hsv, loww, highw)
-        cv2.imshow('maskw', maskw)
-    else:
-        maskw = cv2.bitwise_not(cv2.inRange(hsv, highw, loww))
-    temp = maskp + maskw
-    closing = cv2.morphologyEx(temp, cv2.MORPH_CLOSE, kernel)
-    opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel)
-    cv2.imshow('closing', closing)
+def normalise_rgb(arr):
+    norm = arr.copy()
+    for i in range(len(norm)):
+        for j in range(3):
+            norm[i][j] *= (1/255)
+    return norm
 
-    contours, hierarchy = cv2.findContours(opening, 1, 2)
-    l = [0 for i in range(4)]
-    for i in range(len(contours)):
-        cnt = contours[i]
-        x, y, w, h = cv2.boundingRect(cnt)
-        if w >= l[2] and h >= l[3]:
-            l = [x, y, w, h]
-    x, y, w, h = l
-    
 
-    k = cv2.waitKey(1) & 0xff
-    if k==ord('q'):
-        if y+h<=imgb.shape[0] and x++w<=imgb.shape[1]:
-            imgb = imgb[y:y + h, x:x + w]
-            maskb = cv2.blur(opening[y:y + h, x:x + w],(5,5))
-            cv2.imshow('maskb', maskb)
-        break
+def denormalise_hsv(norm):
+    arr = norm.copy()
+    for i in range(len(arr)):
+        arr[i][0] *= 180
+        for j in range(2):
+            arr[i][j+1] *= 255
+    return arr
 
+
+def denormalise_rgb(norm):
+    arr = norm.copy()
+    for i in range(len(arr)):
+        for j in range(3):
+            arr[i][j] *= 255
+    return arr
+
+
+mod = hsv.reshape(hsv.shape[0] * hsv.shape[1], 3)
+clf = KMeans(n_clusters=3)
+labels = clf.fit_predict(mod)
+counts = Counter(labels)
+center_colours = clf.cluster_centers_
+hsv_colours = center_colours
+norm_hsv = normalise_hsv(hsv_colours)
+rgb_colours = denormalise_rgb([hsv_to_rgb(norm_hsv[i]) for i in range(len(hsv_colours))])
+#rgb_colours = [bgr2rgb(center_colours[i]) for i in range(len(center_colours))]
+hex_colours = [rgb2hex(rgb_colours[i]) for i in range(len(rgb_colours))]
+plt.figure(figsize=(8, 6))
+plt.pie(counts.values(), labels=hex_colours, colors=hex_colours)
+print(hsv_colours)
+pink = [c for c in hsv_colours if c[0] > 150 and c[1] > 100][0]
+print(pink)
+
+pbef = Process(imgb)
+pbef.lowp = np.array([(pink[0]-10+180)%180, 50, 100])
+pbef.highp = np.array([(pink[0]+10)%180, 255, 255])
+pbef.loww = np.array([90, 0, 150])
+pbef.highw = np.array([120, 70, 255])
+maskb, imgb = pbef.mask(kernel)
+resb = pbef.res(maskb)
+
+cv2.imshow('imgb', imgb)
+cv2.imshow('maskb', maskb)
+plt.show()
 cv2.waitKey(0)
 cv2.destroyAllWindows()

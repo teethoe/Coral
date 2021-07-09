@@ -7,8 +7,8 @@ from trackbar import TrackbarWindow
 kernel = np.ones((5, 5), np.uint8)
 kernel2 = np.ones((10, 10), np.uint8)
 
-imgb = cv2.imread('./img/before.png')
-imga = cv2.imread('./img/F.png')
+imgb = cv2.imread('./img/ref/Coral Before.png')
+imga = cv2.imread('./img/ref/new/F.png')
 
 imgb = cv2.resize(imgb, None, fx=0.3, fy=0.3, interpolation=cv2.INTER_CUBIC)
 pbef = Process2(imgb)
@@ -37,7 +37,7 @@ while True:
 atb = TrackbarWindow('After', imga)
 
 while True:
-    paft.lowp, paft.highp, paft.loww, paft.highw = atb.get_range(15, 8)
+    paft.lowp, paft.highp, paft.loww, paft.highw = atb.get_range(15, 15)
 
     la, openinga = paft.mask(kernel)
     cv2.imshow('openinga', openinga)
@@ -59,21 +59,11 @@ maska = np.uint8(np.where(maska > 0, 255, 0))
 resb = fix(resb, resa)
 whiteb = pbef.bleached(resb, kernel2)
 whitea = paft.bleached(resa, kernel2)
-#maskc = cv2.bitwise_xor(maskb, maska)
-#maskc = cv2.morphologyEx(maskc, cv2.MORPH_OPEN, kernel)
-#maskc = cv2.morphologyEx(openingc, cv2.MORPH_CLOSE, kernel4)
 dif = Change(imga, maskb, maska)
 growth, death = dif.growth_death(kernel2)
 bleach, recover = dif.bleach_recover(whiteb, whitea, growth, death, kernel)
 final = dif.final()
 
-'''cv2.imshow('growth', growth)
-cv2.imshow('death', death)
-cv2.imshow('maskb', maskb)
-cv2.imshow('maska', maska)
-cv2.imshow('whiteb', whiteb)
-cv2.imshow('whitea', whitea)'''
-#cv2.imshow('maskc', maskc)
 
 plot(imgb, imga, final)
 
