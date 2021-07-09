@@ -7,8 +7,8 @@ from trackbar import TrackbarWindow
 kernel = np.ones((5, 5), np.uint8)
 kernel2 = np.ones((10, 10), np.uint8)
 
-imgb = cv2.imread('./img/ref/new/2.jpg')
-imga = cv2.imread('./img/ref/new/1.jpg')
+imgb = cv2.imread('./img/before.png')
+imga = cv2.imread('./img/F.png')
 
 imgb = cv2.resize(imgb, None, fx=0.3, fy=0.3, interpolation=cv2.INTER_CUBIC)
 pbef = Process2(imgb)
@@ -37,7 +37,7 @@ while True:
 atb = TrackbarWindow('After', imga)
 
 while True:
-    paft.lowp, paft.highp, paft.loww, paft.highw = atb.get_range(15, 15)
+    paft.lowp, paft.highp, paft.loww, paft.highw = atb.get_range(15, 8)
 
     la, openinga = paft.mask(kernel)
     cv2.imshow('openinga', openinga)

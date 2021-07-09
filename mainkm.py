@@ -8,30 +8,32 @@ from change import Change, plot
 kernel = np.ones((5, 5), np.uint8)
 kernel2 = np.ones((10, 10), np.uint8)
 
-imgb = cv2.imread('./img/ref/new/2.jpg')
-#imgb = cv2.flip(imgb, 1)
-imga = cv2.imread('./img/ref/new/1.jpg')
+imgb = cv2.imread('./img/before.png')
+imga = cv2.imread('./img/3.jpg')
+imgb = cv2.resize(imgb, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_CUBIC)
+imga = cv2.resize(imga, None, fx=0.3, fy=0.3, interpolation=cv2.INTER_CUBIC)
 
-
-imgb = cv2.resize(imgb, None, fx=0.3, fy=0.3, interpolation=cv2.INTER_CUBIC)
 pbef = Process(imgb)
-pbef.lowp = np.array([145, 0, 0])
+pbef.lowp = np.array([145, 80, 120])
 pbef.highp = np.array([175, 255, 255])
-pbef.loww = np.array([90, 0, 150])
-pbef.highw = np.array([120, 50, 255])
+pbef.loww = np.array([85, 20, 160])
+pbef.highw = np.array([115, 100, 255])
 maskb, imgb = pbef.mask(kernel)
 resb = pbef.res(maskb)
 
 
-imga = cv2.resize(imga, None, fx=0.3, fy=0.3, interpolation=cv2.INTER_CUBIC)
 paft = Process(imga)
-paft.lowp = np.array([145, 0, 0])
-paft.highp = np.array([175, 255, 255])
+paft.cluster(10)
+paft.pie(10)
+cv2.waitKey(0)
 paft.loww = np.array([90, 0, 150])
-paft.highw = np.array([120, 50, 255])
+paft.highw = np.array([120, 70, 255])
 maska, imga = paft.mask(kernel)
 resa = paft.res(maska)
 
+cv2.imshow('maskb', maskb)
+cv2.imshow('maska', maska)
+cv2.waitKey(0)
 
 maskb = fix(maskb, maska)
 maskb = np.uint8(np.where(maskb > 0, 255, 0))
@@ -43,7 +45,6 @@ dif = Change(imga, maskb, maska)
 growth, death = dif.growth_death(kernel2)
 bleach, recover = dif.bleach_recover(whiteb, whitea, growth, death, kernel)
 final = dif.final()
-
 
 plot(imgb, imga, final)
 plt.show()

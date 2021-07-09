@@ -1,17 +1,42 @@
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import hsv_to_rgb
+from colourFunc import *
+from sklearn.cluster import KMeans
+from collections import Counter
 
 
 class Process:
     def __init__(self, img):
         self.img = img
         self.hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        self.hpink = 0
-        self.hwhite = 0
-        self.lowp = 0
-        self.highp = 0
-        self.loww = 0
-        self.highw = 0
+        self.lowp = np.array([0 for i in range(3)])
+        self.highp = np.array([0 for i in range(3)])
+        self.loww = np.array([0 for i in range(3)])
+        self.highw = np.array([0 for i in range(3)])
+        self.hsv_colours = [[0 for i in range(3)] for j in range(3)]
+        self.rgb_colours = [[0 for i in range(3)] for j in range(3)]
+        self.counts = Counter()
+
+    def cluster(self, r):
+        mod = self.hsv.reshape(self.hsv.shape[0] * self.hsv.shape[1], 3)
+        clf = KMeans(n_clusters=3)
+        labels = clf.fit_predict(mod)
+        self.counts = Counter(labels)
+        self.hsv_colours = clf.cluster_centers_
+        pink = [c for c in self.hsv_colours if c[0] > 150 and c[1] > 100][0]
+        self.lowp = np.array([(pink[0]-r+180) % 180, 50, 0])
+        self.highp = np.array([(pink[0]+r) % 180, 255, 255])
+
+    def pie(self, r):
+        self.cluster(r)
+        norm_hsv = normalise_hsv(self.hsv_colours)
+        self.rgb_colours = denormalise_rgb([hsv_to_rgb(norm_hsv[i]) for i in range(len(norm_hsv))])
+        hex_colours = [rgb2hex(self.rgb_colours[i]) for i in range(len(self.rgb_colours))]
+        plt.figure(figsize=(8, 6))
+        plt.pie(self.counts.values(), labels=hex_colours, colors=hex_colours)
+        plt.show()
 
     def mask(self, kernel):
         if self.lowp[0] < self.highp[0]:
@@ -32,7 +57,10 @@ class Process:
             maskw = cv2.bitwise_not(cv2.inRange(self.hsv, self.loww, self.highw))
         temp = maskp + maskw
         closing = cv2.morphologyEx(temp, cv2.MORPH_CLOSE, kernel)
-        opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel)
+        kernel2 = np.ones((7, 7), np.uint8)
+        opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel2)
+        cv2.imshow('opening', opening)
+        cv2.waitKey(0)
         #opening = cv2.normalize(src=opening, dst=None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
         contours, hierarchy = cv2.findContours(opening, 1, 2)
         l = [0 for i in range(4)]
@@ -43,7 +71,6 @@ class Process:
                 l = [x, y, w, h]
         x, y, w, h = l
         self.img = self.img[y:y + h, x:x + w]
-        #mask = cv2.blur(opening[y:y + h, x:x + w],(5,5))
         mask = opening[y:y + h, x:x + w]
         mask = cv2.blur(mask, (5, 5))
         #mask[mask < 0] = 0
