@@ -37,7 +37,7 @@ while True:
 atb = TrackbarWindow('After', imga)
 
 while True:
-    paft.lowp, paft.highp, paft.loww, paft.highw = atb.get_range(15, 15)
+    paft.lowp, paft.highp, paft.loww, paft.highw = atb.get_range(10, 15)
 
     la, openinga = paft.mask(kernel)
     cv2.imshow('openinga', openinga)

@@ -59,8 +59,6 @@ class Process:
         closing = cv2.morphologyEx(temp, cv2.MORPH_CLOSE, kernel)
         kernel2 = np.ones((8, 8), np.uint8)
         opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel2)
-        cv2.imshow('opening', opening)
-        cv2.waitKey(0)
         #opening = cv2.normalize(src=opening, dst=None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
         contours, hierarchy = cv2.findContours(opening, 1, 2)
         l = [0 for i in range(4)]
