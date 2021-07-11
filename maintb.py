@@ -7,10 +7,10 @@ from trackbar import TrackbarWindow
 kernel = np.ones((5, 5), np.uint8)
 kernel2 = np.ones((10, 10), np.uint8)
 
-imgb = cv2.imread('./img/ref/Coral Before.png')
-imga = cv2.imread('./img/ref/new/F.png')
+imgb = cv2.imread('./img/before.png')
+imga = cv2.imread('./img/3.jpg')
 
-imgb = cv2.resize(imgb, None, fx=0.3, fy=0.3, interpolation=cv2.INTER_CUBIC)
+imgb = cv2.resize(imgb, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_CUBIC)
 pbef = Process2(imgb)
 imga = cv2.resize(imga, None, fx=0.3, fy=0.3, interpolation=cv2.INTER_CUBIC)
 paft = Process2(imga)

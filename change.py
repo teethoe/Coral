@@ -28,7 +28,7 @@ class Change:
             for i in range(len(contours)):
                 cnt = contours[i]
                 x, y, w, h = cv2.boundingRect(cnt)
-                if w > 15 and h > 15:
+                if w > 15 and h > 15 and w*h > 800:
                     self.change = cv2.rectangle(self.change, (x, y), (x+w, y+h), colours[j], 2)
         return arr
 
@@ -44,7 +44,7 @@ class Change:
             for i in range(len(contours)):
                 cnt = contours[i]
                 x, y, w, h = cv2.boundingRect(cnt)
-                if w > 15 and h > 15:
+                if w > 15 and h > 15 and w*h > 800:
                     self.change = cv2.rectangle(self.change, (x, y), (x+w, y+h), colours[j], 2)
         return arr
 
