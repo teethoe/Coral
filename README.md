@@ -1,6 +1,8 @@
 # Coral
 Using image recognition to determine the health of a coral colony by comparing its current condition to past data
 
+Please check the png image files for a visualising explanation
+
 A large coral colony will be located in the reef. The coral colony will be constructed from ½-inch PVC pipe. The base of the coral will be located in two squares in the coral reef grid. Companies must determine the health of the coral colony by comparing the current image to an image taken one year ago. Companies must compare images to assess whether the coral has grown, is damaged/has died, is bleached/blotched, or has recovered from bleaching/blotching. Growth is defined as the coral colony having new branches not seen in the previous image. Damage or death is defined as the coral colony missing branches that were seen in the previous image. Coral bleaching or blotching is defined as colored branches from the previous photo having turned white. Recovery from bleaching or blotching is defined as white branches from the previous photo now being colored. 
 Companies must compare the current coral colony to the previous image and show any changes on a video display. The base of the coral will be painted black, will not change shape or color, and should not be used in the image comparisons. 
 Companies may develop image recognition software to identify and display the areas of change on the coral colony to the station judge. On a video screen, the company’s program should outline areas where the coral has changed. The following parameters must be used:
