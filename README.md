@@ -15,5 +15,6 @@ The coral colony picture is masked using the pink and white colour ranges to pro
 Both masks of the before and after corals are being fed to the ORB detector, and the key points are found. The key points are then being matched using brute force matching, and only the top 90% of matches are being used to reduce inaccuracies. Homography is found using the matched points and the perspective of the before mask is fixed using homography to match the mask of the after coral colony. Then the masks are being compared bitwise to obtain the changes of the colony.  
   
   
-![alt text](https://github.com/teethoe/Coral/blob/main/Coral%20Process%20Diagram.png?raw=true)
-![alt text](https://github.com/teethoe/Coral/blob/main/Coral%20Change%20Determination.png?raw=true)
+![alt text](https://github.com/teethoe/Coral/blob/main/sample%20test%20result.png?raw=true)    
+![alt text](https://github.com/teethoe/Coral/blob/main/Coral%20Process%20Diagram.png?raw=true)  
+![alt text](https://github.com/teethoe/Coral/blob/main/Coral%20Change%20Determination.png?raw=true)  
