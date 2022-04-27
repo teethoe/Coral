@@ -14,5 +14,6 @@ Solution:
 The coral colony picture is masked using the pink and white colour ranges to produce a mask for each colour as well as a combined mask of the whole coral colony. The HSV colour ranges of the after image are found using the KMeans clustering algorithm, where n=3 is passed through as the parameter for the number of clusters to be found, which includes the pink, white and background colour.  
 Both masks of the before and after corals are being fed to the ORB detector, and the key points are found. The key points are then being matched using brute force matching, and only the top 90% of matches are being used to reduce inaccuracies. Homography is found using the matched points and the perspective of the before mask is fixed using homography to match the mask of the after coral colony. Then the masks are being compared bitwise to obtain the changes of the colony.
 
-![alt text](https://github.com/teethoe/Coral/main/Coral Process Diagram.png?raw=true)
-![alt text](https://github.com/teethoe/Coral/main/Coral Change Determination.png?raw=true)
+
+![alt text](https://github.com/teethoe/Coral/blob/main/Coral%20Process%20Diagram.png?raw=true)
+![alt text](https://github.com/teethoe/Coral/blob/main/Coral%20Change%20Determination.png?raw=true)
