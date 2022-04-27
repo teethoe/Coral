@@ -11,6 +11,7 @@ Red = Areas of bleaching/blotching
 Blue = Areas that have recovered from bleaching/blotching  
   
 ![alt text](https://github.com/teethoe/Coral/blob/main/sample%20test%20result.png?raw=true)  
+(Note that the before and after images shown above have already been processed by the program (cropped and perspective fixed), they are not the orginal sample images fed to the program)  
   
 Solution:  
 The coral colony picture is masked using the pink and white colour ranges to produce a mask for each colour as well as a combined mask of the whole coral colony. The HSV colour ranges of the images are found using the KMeans clustering algorithm, where n=3 is passed through as the parameter for the number of clusters to be found, which includes the pink, white and background colour. (the "cluster" function in the Process class in https://github.com/teethoe/Coral/blob/main/process.py)  
