@@ -92,7 +92,7 @@ def fix(maskb, maska):
     kpb, db = orb_detector.detectAndCompute(maskb, None)
     kpa, da = orb_detector.detectAndCompute(maska, None)
     matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-    matches = matcher.match(db, da)
+    matches = list(matcher.match(db, da))
     matches.sort(key=lambda x: x.distance)
     matches = matches[:int(len(matches) * 90)]
     no_of_matches = len(matches)

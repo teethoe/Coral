@@ -53,7 +53,7 @@ class Change:
 
 
 def plot(imgb, imga, final):
-    fig, axs = plt.subplots(1, 3, dpi=400)
+    fig, axs = plt.subplots(1, 3, dpi=200)
     rgb_imgb = imgb[..., ::-1]
     axs[0].imshow(rgb_imgb)
     axs[0].set_title('Before')
